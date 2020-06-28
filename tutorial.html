@@ -1,0 +1,52 @@
+#update the package
+sudo apt-get update
+sudo apt-get upgrade
+
+#install the motion tool
+sudo apt-get install motion -y
+
+#check if the devices is connected or not 
+lsusb
+
+#all connected video devices / cameras should be displayed 
+ls /dev/video* 
+
+
+v4l2-ctl -V
+
+#Edit motion conf file 
+sudo nano /etc/motion/motion.conf
+	4l2_palette 15      # Take number from the table in front, 15 corresponds to YUYV
+
+	# Image width (pixels). Valid range: Camera dependent, default: 352 
+	width 640 
+
+	# Image height (pixels). Valid range: Camera dependent, default: 288 
+	height 480 # Maximum number of frames to be captured per second. 
+
+	# Valid range: 2-100. Default: 100 (almost no limit). 
+	framerate 10 
+	
+	# Start in daemon (background) mode and release terminal (default: off)
+	daemon on
+
+	# Restrict stream connections to localhost only (default: on)
+	stream_localhost off
+
+	# Target base directory for pictures and films
+	# Recommended to use absolute path. (Default: current working directory)
+	target_dir /home/pi/Monitor 
+	
+	# if the above target gives error create a new folder anywhere else and give the correct permission with the command
+	sudo touch motion.log
+	#update the location here
+	sudo nano /etc/motion/motion.conf 
+
+	# Give the motion service the permission
+	sudo chown motion:motion /home/pi/webcam/log/motion.log
+	
+sudo nano /etc/default/motion
+start_motion_daemon=yes
+
+Sudo reboot
+sudo service motion start
